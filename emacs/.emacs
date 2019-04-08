@@ -43,9 +43,11 @@
 (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))  ;;Command "control + h" is "BS".
 
 ;;Tab settings
-(setq-default tab-width 4)
+(setq default-tab-width 4)	;default-tab
+(setq-default tab-width 4)  ;global-tab-width
 (setq-default indent-tabs-mode t)
 (setq indent-tabs-mode t)
+(setq tab-always-indent nil)
 (global-set-key "\C-i"
 		'(lambda ()
 		   (interactive)
@@ -53,7 +55,14 @@
 
 ;;Cmode & C++mode Settings;
 (setq c-basic-offset 4)
-
+(setq c-tab-always-indent t)
+(defun my-c-c++-mode-init ()
+  (setq c-basic-offset 4)
+  (make-local-variable 'c-tab-always-indent)
+  (setq c-tab-always-indent nil)
+  )
+(add-hook 'c-mode-hook 'my-c-c++-mode-init)
+(add-hook 'c++-mode-hook 'my-c-c++-mode-init)
 
 ;;Backup file disable
 (setq make-backup-files nil)
@@ -74,11 +83,13 @@
 
 ;Recent file
 (require 'recentf)
+(require 'recentf-ext)
 (setq recentf-max-saved-items 2000) ;; 2000ファイルまで履歴保存する
 (setq recentf-auto-cleanup 'never)  ;; 存在しないファイルは消さない
 (setq recentf-exclude '("/recentf" "COMMIT_EDITMSG" "/.?TAGS" "^/sudo:" "/\\.emacs\\.d/games/*-scores" "/\\.emacs\\.d/\\.cask/"))
 (setq recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list))
 (recentf-mode 1)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
 ;(bind-key "C-c t" 'recentf-open-files)
 
 
