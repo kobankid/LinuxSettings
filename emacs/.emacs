@@ -92,6 +92,16 @@
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
 ;(bind-key "C-c t" 'recentf-open-files)
 
+;;auto-complete
+(require 'auto-complete-config)
+(ac-config-default)
+(ac-set-trigger-key "TAB")
+(global-auto-complete-mode t)
+
+(require 'auto-complete-c-headers)
+(add-to-list 'ac-sources 'ac-source-c-headers)
+
+
 
 ;Show TAB & SPACE
 ;(require 'whitespace)
@@ -125,9 +135,15 @@
 
 (put 'upcase-region 'disabled nil)
 
-
+;;For mac settings
 (when (eq system-type 'darwin)
   (setq ns-command-modifier (quote meta)))
+
+;(setq ns-command-modifier (quote meta))
+;(setq ns-alternate-modifier (quote meta))
+
+;(setq mac-command-modifier 'meta)
+;(setq mac-option-modifier 'alt)
 
 (setq mac-pass-control-to-system nil)
 (setq mac-pass-command-to-system nil)
@@ -137,7 +153,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (helm undo-tree vdiff flymake))))
+ '(package-selected-packages
+   (quote
+	(ggtags auto-complete-clang auto-complete-c-headers auto-complete helm undo-tree vdiff flymake))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
