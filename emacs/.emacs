@@ -102,6 +102,17 @@
 (add-to-list 'ac-sources 'ac-source-c-headers)
 
 
+;;irony
+(require 'irony)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'c++mode-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(add-to-list 'company-backends 'company-irony) ;backend
+
+
+
+
 
 ;Show TAB & SPACE
 ;(require 'whitespace)
@@ -155,7 +166,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(ggtags auto-complete-clang auto-complete-c-headers auto-complete helm undo-tree vdiff flymake))))
+	(company-irony irony ggtags auto-complete-clang auto-complete-c-headers auto-complete helm undo-tree vdiff flymake))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
