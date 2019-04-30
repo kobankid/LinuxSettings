@@ -1,10 +1,24 @@
-;load-path
+;;load-path
 (add-to-list 'load-path "/usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/")
 (add-to-list 'load-path "/usr/local/Cellar/global/6.6.3/share/gtags/") ;;gtags
 (add-to-list 'load-path "/usr/local/bin/global")
 (add-to-list 'load-path "/Users/Toshi/.emacs.d/elpa/async-20181224.454")
 (add-to-list 'load-path "/Users/Toshi/.emacs.d/elpa/helm-core-20190406.1826/")
 (add-to-list 'load-path "/Users/Toshi/.emacs.d/elpa/helm-20190405.1842/")
+
+;;Region overwrite mode
+(delete-selection-mode t)
+
+;;auto-install
+;(add-to-list 'load-path "~/.emacs.d/auto-install/")
+;(require 'auto-install)
+;(auto-install-update-emacswiki-package-name t)
+;(auto-install-compatibility-setup)
+;(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;(require 'open-junk-file)
+;(require 'lispcmp)
+
 
 ;helm
 (require 'helm)
@@ -31,16 +45,29 @@
 
 ;;Cursor blinking
 (blink-cursor-mode t)
-(show-paren-mode t)       ;;bliking kakko
-	
+(show-paren-mode t)       ;;bliking kakkon
+(setq cursor-type 'box)
+;(set-cursor-color "#00FF00")
+
 ;;Line highlight settings
-;(global-hl-line-mode t)
+(global-hl-line-mode t)
+
+;;Face settings
+(progn
+	(set-face-foreground 'hl-line  "white")	
+	(set-face-background 'hl-line "color-236")
+	(set-face-foreground 'region "RoyalBlue")
+	(set-face-background 'region "white")
+	(set-face-background 'show-paren-match "SandyBrown")
+	(set-face-foreground 'show-paren-match "navy blue")
+	)
 
 ;;Key settings
 (define-key global-map [?\M-¥] "\\")		            ;;Command "option+¥" is "\".
 (global-set-key "\C-h" 'backward-delete-char)	            ;;Command "control + h" is "BS".
 (keyboard-translate ?\C-h ?\C-?)                            ;;Command "control + h" is "BS".
 (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))  ;;Command "control + h" is "BS".
+
 
 ;;Tab settings
 (setq default-tab-width 4)	;default-tab
@@ -63,6 +90,14 @@
   )
 (add-hook 'c-mode-hook 'my-c-c++-mode-init)
 (add-hook 'c++-mode-hook 'my-c-c++-mode-init)
+
+;;Python settings
+(add-hook 'python-mode-hook
+		  '(lambda()
+			 (setq indent-tabs-mode t)
+			 (setq indent-level 4)
+			 (setq python-indent 4)
+			 (setq tab-width 4)))
 
 ;;Backup file disable
 (setq make-backup-files nil)
@@ -92,27 +127,45 @@
 (global-set-key (kbd "C-x C-r") 'recentf-open-files)
 ;(bind-key "C-c t" 'recentf-open-files)
 
-;;auto-complete
-(require 'auto-complete-config)
-(ac-config-default)
-(ac-set-trigger-key "TAB")
-(global-auto-complete-mode t)
+(require 'cl-lib)
+(cl-dolist (hook (list
+				  'c-mode-hook
+				  'c++mode-mode-hook
+				  'objc-mode-hook
+				  'emacs-lisp-mode-hook))
+  (add-hook hook (lambda ()
+				   ;;auto-complete
+				   ;(require 'auto-complete-config)
+				   ;(ac-config-default)
+				   ;(ac-set-trigger-key "TAB")
+				   ;(global-auto-complete-mode t)
+				   ;(require 'auto-complete-c-headers)
+				   ;(add-to-list 'ac-sources 'ac-source-c-headers)
 
-(require 'auto-complete-c-headers)
-(add-to-list 'ac-sources 'ac-source-c-headers)
+				   ;;company
+				   (require 'company)
+				   (global-company-mode)
+				   (setq company-idle-delay 0)
+				   (setq company-minimum-prefix-length 2)
+				   (setq company-selection-wrap-around t))))
 
 
 ;;irony
 (require 'irony)
+(require 'company)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'c++mode-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
+(add-hook 'emacs-lisp-mood-hook 'irony-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 (add-to-list 'company-backends 'company-irony) ;backend
+(add-to-list 'company-backends 'company-dabbrev-code)
 
-
-
-
+;;window moving settings
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
 
 ;Show TAB & SPACE
 ;(require 'whitespace)
