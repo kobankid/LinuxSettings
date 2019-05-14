@@ -5,9 +5,16 @@
 (add-to-list 'load-path "/Users/Toshi/.emacs.d/elpa/async-20181224.454")
 (add-to-list 'load-path "/Users/Toshi/.emacs.d/elpa/helm-core-20190406.1826/")
 (add-to-list 'load-path "/Users/Toshi/.emacs.d/elpa/helm-20190405.1842/")
+(add-to-list 'load-path "/Users/Toshi/.emacs.d/elisp/")
 
 ;;Region overwrite mode
 (delete-selection-mode t)
+
+;;Whole line delete
+(global-set-key (kbd "M-k") 'kill-whole-line)
+
+;;Scroll setting
+(setq scroll-conservatively 1)
 
 ;;auto-install
 ;(add-to-list 'load-path "~/.emacs.d/auto-install/")
@@ -19,6 +26,21 @@
 ;(require 'open-junk-file)
 ;(require 'lispcmp)
 
+;;redo+
+(require 'redo+)
+(global-set-key (kbd "M-_") 'redo)
+
+;; doxymacs mode
+(require 'doxymacs)
+
+;; custom c-mode hook for doxymacs
+(defun doxy-custom-c-mode-hook ()
+  (doxymacs-mode 1)
+  (setq doxymacs-doxygen-style "JavaDoc")
+  (setq doxymacs-command-character "@")
+  )
+
+(add-hook 'c-mode-common-hook 'doxy-custom-c-mode-hook)
 
 ;helm
 (require 'helm)
@@ -88,7 +110,7 @@
   (make-local-variable 'c-tab-always-indent)
   (setq c-tab-always-indent nil)
   )
-(add-hook 'c-mode-hook 'my-c-c++-mode-init)
+(add-hook 'c-mode-Hook 'my-c-c++-mode-init)
 (add-hook 'c++-mode-hook 'my-c-c++-mode-init)
 
 ;;Python settings
@@ -217,6 +239,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#2d3743" "#ff4242" "#74af68" "#dbdb95" "#34cae2" "#008b8b" "#00ede1" "#e1e1e0"])
+ '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
 	(company-irony irony ggtags auto-complete-clang auto-complete-c-headers auto-complete helm undo-tree vdiff flymake))))
