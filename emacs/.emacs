@@ -9,6 +9,20 @@
 
 ;;Region overwrite mode
 (delete-selection-mode t)
+;;
+(defun highlight-current-word()
+  "highlight the word under cursor"
+  (interactive)
+  (let (head-point tail-point word)
+    (skip-chars-forward "-_A-Za-z0-9")
+    (setq tail-point (point))
+    (skip-chars-backward "-_A-Za-z0-9")
+    (setq head-point (point))
+    (setq word (buffer-substring-no-properties head-point tail-point))
+    (setq isearch-string word)
+    (isearch-search-and-update)))
+
+(add-hook 'isearch-mode-hook 'highlight-current-word)
 
 ;;Whole line delete
 (global-set-key (kbd "M-k") 'kill-whole-line)
