@@ -7,9 +7,37 @@
 (add-to-list 'load-path "/Users/Toshi/.emacs.d/elpa/helm-20190405.1842/")
 (add-to-list 'load-path "/Users/Toshi/.emacs.d/elisp/")
 
+(global-auto-revert-mode 1)
+
+;;Tab settings
+(setq default-tab-width 4)	;default-tab
+(setq-default tab-width 4)  ;global-tab-width
+(setq tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq indent-tabs-mode nil)
+(setq-default tab-always-indent t)
+(setq tab-always-indent t)
+
+;;Cmode & C++mode Settings;
+(defun my-c-c++-mode-init ()
+  (setq c-basic-offset 4)
+  (setq tab-width 4)
+  (make-local-variable 'c-tab-always-indent)
+  (setq c-tab-always-indent t)
+  (setq tab-always-indent t)
+  (setq indent-tabs-mode nil)
+  )
+(add-hook 'c-mode-hook 'my-c-c++-mode-init)
+(add-hook 'c++-mode-hook 'my-c-c++-mode-init)
+
+(global-set-key "\M-i"
+		'(lambda ()
+		   (interactive)
+		   (insert "\t")))
+
 ;;Region overwrite mode
 (delete-selection-mode t)
-;;
+;;find settings
 (defun highlight-current-word()
   "highlight the word under cursor"
   (interactive)
@@ -23,6 +51,26 @@
     (isearch-search-and-update)))
 
 (add-hook 'isearch-mode-hook 'highlight-current-word)
+
+;;grep settings
+;;; grep
+(define-key global-map (kbd "C-x g") 'grep)
+(require 'grep)
+(setq grep-command-before-query "grep -nH -r -e ")
+(defun grep-default-command ()
+  (if current-prefix-arg
+      (let ((grep-command-before-target
+             (concat grep-command-before-query
+                     (shell-quote-argument (grep-tag-default)))))
+        (cons (if buffer-file-name
+                  (concat grep-command-before-target
+                          " *."
+                          (file-name-extension buffer-file-name))
+                (concat grep-command-before-target " ."))
+              (+ (length grep-command-before-target) 1)))
+    (car grep-command)))
+(setq grep-command (cons (concat grep-command-before-query " .")
+                         (+ (length grep-command-before-query) 1)))
 
 ;;Whole line delete
 (global-set-key (kbd "M-k") 'kill-whole-line)
@@ -105,28 +153,6 @@
 (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))  ;;Command "control + h" is "BS".
 
 
-;;Tab settings
-(setq default-tab-width 4)	;default-tab
-(setq-default tab-width 4)  ;global-tab-width
-(setq-default indent-tabs-mode t)
-(setq indent-tabs-mode t)
-(setq tab-always-indent nil)
-(global-set-key "\C-i"
-		'(lambda ()
-		   (interactive)
-		   (insert "\t")))
-
-;;Cmode & C++mode Settings;
-(setq c-basic-offset 4)
-(setq c-tab-always-indent t)
-(defun my-c-c++-mode-init ()
-  (setq c-basic-offset 4)
-  (make-local-variable 'c-tab-always-indent)
-  (setq c-tab-always-indent nil)
-  )
-(add-hook 'c-mode-Hook 'my-c-c++-mode-init)
-(add-hook 'c++-mode-hook 'my-c-c++-mode-init)
-
 ;;Python settings
 (add-hook 'python-mode-hook
 		  '(lambda()
@@ -203,6 +229,17 @@
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 
+;;global tags auto update settings
+(defun my-c-mode-update-gtags ()
+  (let* ((file (buffer-file-name (current-buffer)))
+     (dir (directory-file-name (file-name-directory file))))
+    (when (executable-find "global")
+      (start-process "gtags-update" nil
+             "global" "-uv"))))
+
+(add-hook 'after-save-hook
+      'my-c-mode-update-gtags)
+
 ;Show TAB & SPACE
 ;(require 'whitespace)
 ;(setq whitespace-style '(face           ; faceで可視化
@@ -260,7 +297,7 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-	(company-irony irony ggtags auto-complete-clang auto-complete-c-headers auto-complete helm undo-tree vdiff flymake))))
+	(ripgrep company-irony irony ggtags auto-complete-clang auto-complete-c-headers auto-complete helm undo-tree vdiff flymake))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
