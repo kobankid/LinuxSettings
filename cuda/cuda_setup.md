@@ -15,7 +15,7 @@ sudo emacs -nw /etc/ld.so.conf.d/cuda-11.6-lib64.conf
 ```
 ## cuDNN    
 ```sh
-# downloat cudnn-local-repo-ubuntu2204-8.5.0.96_1.0-1_amd64.deb from https://developer.nvidia.com/rdp/cudnn-archive
+# download cudnn-local-repo-ubuntu2204-8.5.0.96_1.0-1_amd64.deb from https://developer.nvidia.com/rdp/cudnn-archive
 sudo dpkg -i cudnn-local-repo-ubuntu2204-8.5.0.96_1.0-1_amd64.deb
 sudo cp /var/cudnn-local-repo-ubuntu2204-8.5.0.96/cudnn-local-7ED72349-keyring.gpg /usr/share/keyrings/cuda-archive-keyring.gpg
 sudo dpkg -i cudnn-local-repo-ubuntu2204-8.5.0.96_1.0-1_amd64.deb
